@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TheCube : MonoBehaviour
+public class SnakeHead : MonoBehaviour
 {
     private readonly float _speedIncrement = 0.2f;
     private readonly float _spaceBetweenSnakeBodyParts = 1.5f;
