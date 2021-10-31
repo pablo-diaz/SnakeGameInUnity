@@ -4,6 +4,7 @@ public class SnakeHead : MonoBehaviour
 {
     private readonly float _speedIncrement = 0.2f;
     private readonly float _spaceBetweenSnakeBodyParts = 1.5f;
+    private static System.Random _randomizer = new System.Random();
     
     private float _movingSpeed;
     private Direction _direction;
@@ -59,6 +60,7 @@ public class SnakeHead : MonoBehaviour
 
     private void ProcessCookieHit(GameObject cookie)
     {
+        AddNewCookie(cookie);
         EatCookie(cookie);
         IncreaseSpeed();
         EnlargeSnakeBody();
@@ -67,6 +69,19 @@ public class SnakeHead : MonoBehaviour
     private void EatCookie(GameObject cookieToEat)
     {
         Destroy(cookieToEat);
+    }
+
+    private void AddNewCookie(GameObject basedOnCookieTemplate)
+    {
+        var newCookie = Instantiate(basedOnCookieTemplate);
+        newCookie.SendMessage("SetPosition", GetRandomPositionForNewCookie());
+    }
+
+    private Vector3 GetRandomPositionForNewCookie()
+    {
+        var x = _randomizer.Next(-10, 10);
+        var z = _randomizer.Next(-10, 10);
+        return new Vector3(x, 0, z);
     }
 
     private void IncreaseSpeed()
