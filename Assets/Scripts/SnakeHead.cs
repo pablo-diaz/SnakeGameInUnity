@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SnakeHead : MonoBehaviour
 {
+    private readonly float _defaultHeight = 0.6f;
     private readonly float _speedIncrement = 0.2f;
     private readonly float _spaceBetweenSnakeBodyParts = 1.5f;
     private static System.Random _randomizer = new System.Random();
@@ -36,6 +37,11 @@ public class SnakeHead : MonoBehaviour
             print("Nada");
         else if (Input.GetKeyDown(KeyCode.E))
             EnlargeSnakeBody();
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
+            Application.Quit();
+        }
     }
 
     private void FixedUpdate()
@@ -81,7 +87,7 @@ public class SnakeHead : MonoBehaviour
     {
         var x = _randomizer.Next(-10, 10);
         var z = _randomizer.Next(-10, 10);
-        return new Vector3(x, 0, z);
+        return new Vector3(x, _defaultHeight, z);
     }
 
     private void IncreaseSpeed()
