@@ -10,8 +10,8 @@ public class Cookie : MonoBehaviour
     {
     }
 
-    void SetPosition(Vector3 position)
+    void SetPosition(Vector2 position)
     {
-        this.transform.position = position;
+        this.transform.position = new Vector3(position.x, this.transform.position.y, position.y);
     }
 }

@@ -1,0 +1,78 @@
+using UnityEngine;
+
+public class EatCookie : MonoBehaviour
+{
+    private static System.Random _randomizer = new System.Random();
+
+    public GameObject SnakeTail;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (DidItHitACookie(collision.gameObject))
+            ProcessCookieHit(collision.gameObject);
+    }
+
+    private bool DidItHitACookie(GameObject gameObjectInCollision) =>
+        gameObjectInCollision.tag == "Cookie";
+
+    private void ProcessCookieHit(GameObject cookie)
+    {
+        AddNewCookie(cookie);
+        Eat(cookie);
+        IncreaseSnakeSpeed();
+        //EnlargeSnakeBody();
+    }
+
+    private void Eat(GameObject cookieToEat)
+    {
+        Destroy(cookieToEat);
+    }
+
+    private void AddNewCookie(GameObject basedOnCookieTemplate)
+    {
+        var newCookie = Instantiate(basedOnCookieTemplate);
+        newCookie.SendMessage("SetPosition", GetRandomPositionForNewCookie());
+    }
+
+    private Vector2 GetRandomPositionForNewCookie()
+    {
+        var x = _randomizer.Next(-10, 10);
+        var z = _randomizer.Next(-10, 10);
+        return new Vector2(x, z);
+    }
+
+    private void IncreaseSnakeSpeed()
+    {
+        this.SendMessage("IncreaseSpeed", 0.5f);
+    }
+
+    private void EnlargeSnakeBody()
+    {
+        var newSnakeBodyPart = CreateNewSnakeBodyPart();
+        JoinNewSnakeBodyPartToTail(newSnakeBodyPart);
+        SetNewTail(newSnakeBodyPart);
+    }
+
+    private GameObject CreateNewSnakeBodyPart()
+    {
+        var newSnakeBodyPart = Instantiate(SnakeTail);
+        newSnakeBodyPart.SendMessage("SetPosition", GetNextTailPosition());
+        return newSnakeBodyPart;
+    }
+
+    private void JoinNewSnakeBodyPartToTail(GameObject newSnakeBodyPart)
+    {
+        SnakeTail.SendMessage("JoinToSnakeBodyPart", newSnakeBodyPart.GetComponent<Rigidbody>());
+    }
+
+    private void SetNewTail(GameObject newSnakeBodyPart)
+    {
+        SnakeTail = newSnakeBodyPart;
+    }
+
+    private Vector3 GetNextTailPosition()
+    {
+        var direction = (this.transform.position - SnakeTail.transform.position).normalized;
+        return SnakeTail.transform.position - (direction * 1.5f);
+    }
+}

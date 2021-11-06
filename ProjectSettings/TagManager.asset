@@ -7,6 +7,7 @@ TagManager:
   - Cookie
   - SnakeHead
   - SnakeBody
+  - Boundary
   layers:
   - Default
   - TransparentFX
