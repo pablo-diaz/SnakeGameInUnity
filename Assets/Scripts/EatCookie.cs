@@ -20,7 +20,7 @@ public class EatCookie : MonoBehaviour
         AddNewCookie(cookie);
         Eat(cookie);
         IncreaseSnakeSpeed();
-        //EnlargeSnakeBody();
+        EnlargeSnakeBody();
     }
 
     private void Eat(GameObject cookieToEat)
@@ -49,20 +49,15 @@ public class EatCookie : MonoBehaviour
     private void EnlargeSnakeBody()
     {
         var newSnakeBodyPart = CreateNewSnakeBodyPart();
-        JoinNewSnakeBodyPartToTail(newSnakeBodyPart);
         SetNewTail(newSnakeBodyPart);
     }
 
     private GameObject CreateNewSnakeBodyPart()
     {
         var newSnakeBodyPart = Instantiate(SnakeTail);
-        newSnakeBodyPart.SendMessage("SetPosition", GetNextTailPosition());
+        newSnakeBodyPart.transform.position = GetNextTailPosition();
+        newSnakeBodyPart.SendMessage("SetFollowingSnakePart", SnakeTail);
         return newSnakeBodyPart;
-    }
-
-    private void JoinNewSnakeBodyPartToTail(GameObject newSnakeBodyPart)
-    {
-        SnakeTail.SendMessage("JoinToSnakeBodyPart", newSnakeBodyPart.GetComponent<Rigidbody>());
     }
 
     private void SetNewTail(GameObject newSnakeBodyPart)

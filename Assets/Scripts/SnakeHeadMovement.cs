@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 public class SnakeHeadMovement : MonoBehaviour
 {
-    private float _movingSpeed = 1.5f;
+    public static float SnakeMovingSpeed { get; private set; } = 1.5f;
+
     private Vector3 _movementVector = Vector3.forward;
 
     public GameObject NextSnakeBodyPart;
@@ -27,12 +28,11 @@ public class SnakeHeadMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        this.transform.Translate(_movementVector * _movingSpeed * Time.deltaTime);
+        this.transform.Translate(_movementVector * SnakeMovingSpeed * Time.deltaTime);
     }
 
     void IncreaseSpeed(float increase)
     {
-        _movingSpeed += increase;
-        NextSnakeBodyPart.SendMessage("IncreaseSpeed", increase);
+        SnakeMovingSpeed += increase;
     }
 }

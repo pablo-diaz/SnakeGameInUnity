@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bffaca2181dbac9428610d2f9ce7302b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SnakeTail: {fileID: 0}
+  SnakeTail: {fileID: 529788023}
 --- !u!54 &133680016
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -669,6 +669,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SnakeBodyPart01
       objectReference: {fileID: 0}
+    - target: {fileID: 115125413643719619, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 115125413643719622, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -683,7 +687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 115125413643719622, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 115125413643719622, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
       propertyPath: m_LocalRotation.w
