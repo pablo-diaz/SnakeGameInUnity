@@ -13,11 +13,6 @@ public class SnakeHeadMovement : MonoBehaviour
         NextSnakeBodyPart.SendMessage("SetFollowingSnakePart", this.gameObject);
     }
 
-    private void CommunicateTurningPosition(Vector3 turningPoint)
-    {
-        NextSnakeBodyPart.SendMessage("AddPositionToFollow", turningPoint.normalized);
-    }
-
     void OnMove(InputValue movementVector)
     {
         var keyboardCoords = movementVector.Get<Vector2>();
@@ -25,8 +20,6 @@ public class SnakeHeadMovement : MonoBehaviour
             return;
 
         this._movementVector = new Vector3(keyboardCoords.x, 0, keyboardCoords.y);
-
-        CommunicateTurningPosition(this.transform.position);
     }
 
     private bool WasMovementRequested(Vector2 coords) =>
