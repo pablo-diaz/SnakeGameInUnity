@@ -1,10 +1,27 @@
 using UnityEngine;
 
+using TMPro;
+
 public class EatCookie : MonoBehaviour
 {
     private static System.Random _randomizer = new System.Random();
 
+    private int _cookieCounter = 0;
+    private int CookieCounter {
+        get => _cookieCounter;
+        set {
+            _cookieCounter = value;
+            CookieCountLabel.text = $"Cookies: {_cookieCounter}";
+        }
+    }
+
     public GameObject SnakeTail;
+    public TextMeshProUGUI CookieCountLabel;
+
+    private void Start()
+    {
+        CookieCounter = 0;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -26,6 +43,7 @@ public class EatCookie : MonoBehaviour
     private void Eat(GameObject cookieToEat)
     {
         Destroy(cookieToEat);
+        CookieCounter++;
     }
 
     private void AddNewCookie(GameObject basedOnCookieTemplate)
