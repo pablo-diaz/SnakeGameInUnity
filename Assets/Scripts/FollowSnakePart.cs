@@ -1,72 +1,84 @@
+using System;
 using System.Collections.Concurrent;
 
 using UnityEngine;
 
 public class FollowSnakePart : MonoBehaviour
 {
-    private const float _minimumDistanceToFollowedPosition = 0.1f;
+    private const float _minimumDistanceToFollowedPosition = 1f;
 
     private float _movingSpeed = 1.5f;
 
-    private Vector3? _nextDirection = null;
-    private Vector3 _currentDirectionVector = Vector3.forward;
-    private Vector3? _turningPoint = null;
-    private ConcurrentStack<(Vector3 direction, Vector3 turningPoint)> _positionsToFollow =
-        new ConcurrentStack<(Vector3 direction, Vector3 turningPoint)>();
+    private float _previousRemainingDistance = float.MaxValue;
+    private Vector3? _followingPoint = null;
+    private ConcurrentStack<Vector3> _pointsToFollow = new ConcurrentStack<Vector3>();
+    private bool _hasFirstFollowingPointBeenSet = false;
 
-    private float? previousRemainingDistance = null;
+    private GameObject _followingSnakePart;
 
-    private void RequestNextTurningPoint()
+    private void RequestNextFollowingPoint()
     {
-        if (_positionsToFollow.IsEmpty || !_positionsToFollow.TryPop(out var nextPosition))
+        if (_pointsToFollow.IsEmpty || !_pointsToFollow.TryPop(out var nextPoint))
             return;
 
-        _nextDirection = nextPosition.direction;
-        _turningPoint = nextPosition.turningPoint;
+        _followingPoint = nextPoint;
     }
+
+    private Vector3 GetCurrentFollowingPoint() =>
+        /*_followingPoint ?? */_followingSnakePart.transform.position;
 
     private void SetNextPositionToFollow()
     {
-        if(!_turningPoint.HasValue && !_positionsToFollow.IsEmpty)
-            RequestNextTurningPoint();
-
-        var remainingDistance = GetRemainingDistance();
-
-        var isItHeading = !previousRemainingDistance.HasValue
-            ? true
-            : previousRemainingDistance.Value > remainingDistance;
-
-        if(!isItHeading && !_positionsToFollow.IsEmpty)
-            RequestNextTurningPoint();
-
-        if (remainingDistance <= _minimumDistanceToFollowedPosition)
+        (var remainingDistance, var isItHeadingTowardsFollowedPoint) = SetRemainingDistance();
+        if (!isItHeadingTowardsFollowedPoint)
         {
-            _turningPoint = null;
-            _currentDirectionVector = _nextDirection.Value;
-            RequestNextTurningPoint();
+            _followingPoint = null;
+            RequestNextFollowingPoint();
+            return;
         }
 
-        previousRemainingDistance = remainingDistance;
+        var isItNearFollowedPoint = remainingDistance <= _minimumDistanceToFollowedPosition;
+        if (!isItNearFollowedPoint)
+            return;
+
+        RequestNextFollowingPoint();
     }
 
     private void FixedUpdate()
     {
+        var targetDir = (GetCurrentFollowingPoint() - this.transform.position).normalized;
+        this.transform.Translate(targetDir * _movingSpeed * Time.deltaTime);
+
         SetNextPositionToFollow();
-        transform.Translate(_currentDirectionVector * _movingSpeed * Time.deltaTime);
     }
 
-    private float GetRemainingDistance() =>
-        _turningPoint.HasValue
-        ? Vector3.Distance(transform.position, _turningPoint.Value)
-        : float.MaxValue;
-
-    void AddPositionToFollow((Vector3 direction, Vector3 turningPoint) position)
+    private (float remainingDistance, bool isItHeadingTowards) SetRemainingDistance()
     {
-        _positionsToFollow.Push(position);
+        var distance = Vector3.Distance(this.transform.position, GetCurrentFollowingPoint());
+        var isItHeadingTowards = _previousRemainingDistance >= distance;
+        _previousRemainingDistance = distance;
+
+        return (distance, isItHeadingTowards);
+    }
+
+    void AddPositionToFollow(Vector3 newFollowingPoint)
+    {
+        _pointsToFollow.Push(newFollowingPoint);
+
+        if(!_hasFirstFollowingPointBeenSet)
+        {
+            RequestNextFollowingPoint();
+            _hasFirstFollowingPointBeenSet = true;
+        }
     }
 
     void IncreaseSpeed(float increase)
     {
         _movingSpeed += increase;
+    }
+
+    void SetFollowingSnakePart(GameObject snakePartToFollow)
+    {
+        _followingSnakePart = snakePartToFollow;
     }
 }

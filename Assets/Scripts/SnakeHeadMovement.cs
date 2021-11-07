@@ -8,9 +8,14 @@ public class SnakeHeadMovement : MonoBehaviour
 
     public GameObject NextSnakeBodyPart;
 
-    private void CommunicateTurningPosition(Vector3 direction, Vector3 turningPoint)
+    private void Start()
     {
-        NextSnakeBodyPart.SendMessage("AddPositionToFollow", (direction, turningPoint));
+        NextSnakeBodyPart.SendMessage("SetFollowingSnakePart", this.gameObject);
+    }
+
+    private void CommunicateTurningPosition(Vector3 turningPoint)
+    {
+        NextSnakeBodyPart.SendMessage("AddPositionToFollow", turningPoint.normalized);
     }
 
     void OnMove(InputValue movementVector)
@@ -21,7 +26,7 @@ public class SnakeHeadMovement : MonoBehaviour
 
         this._movementVector = new Vector3(keyboardCoords.x, 0, keyboardCoords.y);
 
-        CommunicateTurningPosition(this._movementVector, this.transform.position);
+        CommunicateTurningPosition(this.transform.position);
     }
 
     private bool WasMovementRequested(Vector2 coords) =>
@@ -29,7 +34,7 @@ public class SnakeHeadMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.Translate(_movementVector * _movingSpeed * Time.deltaTime);
+        this.transform.Translate(_movementVector * _movingSpeed * Time.deltaTime);
     }
 
     void IncreaseSpeed(float increase)
