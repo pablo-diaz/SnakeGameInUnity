@@ -249,7 +249,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &133680017
 MonoBehaviour:
@@ -661,6 +661,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1343602981}
     m_Modifications:
+    - target: {fileID: 115125413643719618, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 115125413643719619, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
       propertyPath: m_Name
       value: SnakeBodyPart01
@@ -679,7 +683,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 115125413643719622, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.34
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 115125413643719622, guid: fd65ddc23c2b9fa419814f0f8c4e40bc, type: 3}
       propertyPath: m_LocalRotation.w

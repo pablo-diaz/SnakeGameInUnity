@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FollowSnakePart : MonoBehaviour
 {
-    private const float _minimumDistanceToFollowedPosition = 1f;
+    private const float _minimumDistanceToFollowedSnakePart = 1.5f;
 
     private float _movingSpeed = 1.5f;
 
@@ -13,9 +13,24 @@ public class FollowSnakePart : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var targetDir = (_followingSnakePart.transform.position - this.transform.position).normalized;
-        this.transform.Translate(targetDir * _movingSpeed * Time.deltaTime);
+        if (GetDistanceToFollowedSnakePart() <= _minimumDistanceToFollowedSnakePart)
+            return;
+
+        this.Move();
     }
+
+    private void Move()
+    {
+        this.transform.LookAt(_followingSnakePart.transform);
+        var lookAt = Quaternion.LookRotation(_followingSnakePart.transform.position - this.transform.position);
+        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookAt, _movingSpeed * Time.deltaTime);
+        this.transform.Translate(0, 0, _movingSpeed * Time.deltaTime);
+    }
+
+    private float GetDistanceToFollowedSnakePart() =>
+        Vector2.Distance(
+            new Vector2(this.transform.position.x, this.transform.position.z),
+            new Vector2(_followingSnakePart.transform.position.x, _followingSnakePart.transform.position.z));
 
     void IncreaseSpeed(float increase)
     {
