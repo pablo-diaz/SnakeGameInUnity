@@ -27,23 +27,25 @@ public class OtherCollisions : MonoBehaviour
 
     private void ProcessSnakeBodyHit()
     {
-        SetYouLostLabelVisibility(true);
+        SetYouLostLabelVisibility(true, losingReason: "you hit the snake body");
         StopGame();
     }
 
     private void ProcessBoundaryHit()
     {
-        SetYouLostLabelVisibility(true);
+        SetYouLostLabelVisibility(true, losingReason: "you hit a game wall");
         StopGame();
     }
 
-    private void SetYouLostLabelVisibility(bool visible)
+    private void SetYouLostLabelVisibility(bool visible, string losingReason = null)
     {
         YouLostLabel.enabled = visible;
+        if (!string.IsNullOrEmpty(losingReason))
+            YouLostLabel.text += $", because {losingReason}";
     }
 
     private void StopGame()
     {
-
+        this.SendMessage("StopMovement");
     }
 }

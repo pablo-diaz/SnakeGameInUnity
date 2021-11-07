@@ -35,4 +35,9 @@ public class SnakeHeadMovement : MonoBehaviour
     {
         SnakeMovingSpeed += increase;
     }
+
+    void StopMovement()
+    {
+        SnakeMovingSpeed = 0;
+    }
 }
