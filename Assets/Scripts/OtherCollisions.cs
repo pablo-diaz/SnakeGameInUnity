@@ -1,7 +1,16 @@
 using UnityEngine;
 
+using TMPro;
+
 public class OtherCollisions : MonoBehaviour
 {
+    public TextMeshProUGUI YouLostLabel;
+
+    private void Start()
+    {
+        SetYouLostLabelVisibility(false);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (DidItHitSnakeBody(collision.gameObject))
@@ -18,11 +27,23 @@ public class OtherCollisions : MonoBehaviour
 
     private void ProcessSnakeBodyHit()
     {
-        print("Se ha chocado contra el cuerpo");
+        SetYouLostLabelVisibility(true);
+        StopGame();
     }
 
     private void ProcessBoundaryHit()
     {
-        print("Se ha chocado contra el límite");
+        SetYouLostLabelVisibility(true);
+        StopGame();
+    }
+
+    private void SetYouLostLabelVisibility(bool visible)
+    {
+        YouLostLabel.enabled = visible;
+    }
+
+    private void StopGame()
+    {
+
     }
 }
